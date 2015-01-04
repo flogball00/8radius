@@ -1,71 +1,54 @@
 'use strict';
 
-angular.module('8rad')
-  .controller('MainCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      {
-        'title': 'AngularJS',
-        'url': 'https://angularjs.org/',
-        'description': 'HTML enhanced for web apps!',
-        'logo': 'angular.png'
-      },
-      {
-        'title': 'BrowserSync',
-        'url': 'http://browsersync.io/',
-        'description': 'Time-saving synchronised browser testing.',
-        'logo': 'browsersync.png'
-      },
-      {
-        'title': 'GulpJS',
-        'url': 'http://gulpjs.com/',
-        'description': 'The streaming build system.',
-        'logo': 'gulp.png'
-      },
-      {
-        'title': 'Jasmine',
-        'url': 'http://jasmine.github.io/',
-        'description': 'Behavior-Driven JavaScript.',
-        'logo': 'jasmine.png'
-      },
-      {
-        'title': 'Karma',
-        'url': 'http://karma-runner.github.io/',
-        'description': 'Spectacular Test Runner for JavaScript.',
-        'logo': 'karma.png'
-      },
-      {
-        'title': 'Protractor',
-        'url': 'https://github.com/angular/protractor',
-        'description': 'End to end test framework for AngularJS applications built on top of WebDriverJS.',
-        'logo': 'protractor.png'
-      },
-      {
-        'title': 'Bootstrap',
-        'url': 'http://getbootstrap.com/',
-        'description': 'Bootstrap is the most popular HTML, CSS, and JS framework for developing responsive, mobile first projects on the web.',
-        'logo': 'bootstrap.png'
-      },
-      {
-        'title': 'Angular UI Bootstrap',
-        'url': 'http://angular-ui.github.io/bootstrap/',
-        'description': 'Bootstrap components written in pure AngularJS by the AngularUI Team.',
-        'logo': 'ui-bootstrap.png'
-      },
-      {
-        'title': 'Sass (Node)',
-        'url': 'https://github.com/sass/node-sass',
-        'description': 'Node.js binding to libsass, the C version of the popular stylesheet preprocessor, Sass.',
-        'logo': 'node-sass.png'
-      },
-      {
-        'key': 'jade',
-        'title': 'Jade',
-        'url': 'http://jade-lang.com/',
-        'description': 'Jade is a high performance template engine heavily influenced by Haml and implemented with JavaScript for node.',
-        'logo': 'jade.png'
-      }
-    ];
-    angular.forEach($scope.awesomeThings, function(awesomeThing) {
-      awesomeThing.rank = Math.random();
+var app = angular.module('8rad');
+
+
+app.controller('MainCtrl', [function ($scope, $modal, $log) {
+
+}]);
+
+
+
+app.controller('ModalDemoCtrl', function ($scope, $modal, $log) {
+
+
+  $scope.open = function (size) {
+
+    var modalInstance = $modal.open({
+      templateUrl: 'myModalContent.html',
+      controller: 'ModalInstanceCtrl',
+      size: size
     });
-  });
+
+    //modalInstance.result.then(function (selectedItem) {
+    //  $scope.selected = selectedItem;
+    //}, function () {
+    //  $log.info('Modal dismissed at: ' + new Date());
+    //});
+  };
+});
+
+// Please note that $modalInstance represents a modal window (instance) dependency.
+// It is not the same as the $modal service used above.
+
+app.controller('ModalInstanceCtrl', [
+  '$scope',
+  '$modalInstance',
+  '$log',
+  'myFirebase',
+
+  function ModalInstanceCtrl ($scope, $modalInstance, $log, myFirebase) {
+
+    $scope.email = "";
+    $scope.password = "";
+
+    $scope.ok = function () {
+      $log.info('email' + $scope.email + ' password ' + $scope.password);
+      myFirebase.createUser($scope.email, $scope.password);
+      $modalInstance.close('close');
+    };
+
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+}]);
