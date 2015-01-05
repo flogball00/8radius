@@ -3,30 +3,28 @@
 var app = angular.module('8rad');
 
 
-app.controller('MainCtrl', [function ($scope, $modal, $log) {
-
-}]);
+app.controller('WelcomeCtrl',['$scope', '$modal', '$log', function WelcomeCtrl($scope, $modal, $log) {
 
 
-
-app.controller('ModalDemoCtrl', function ($scope, $modal, $log) {
-
-
-  $scope.open = function (size) {
+  $scope.createUser = function (size) {
 
     var modalInstance = $modal.open({
-      templateUrl: 'myModalContent.html',
+      templateUrl: 'createUser.html',
       controller: 'ModalInstanceCtrl',
       size: size
     });
-
-    //modalInstance.result.then(function (selectedItem) {
-    //  $scope.selected = selectedItem;
-    //}, function () {
-    //  $log.info('Modal dismissed at: ' + new Date());
-    //});
   };
-});
+
+  $scope.login = function (size) {
+
+    var modalInstance = $modal.open({
+      templateUrl: 'loginUser.html',
+      controller: 'ModalInstanceCtrl',
+      size: size
+    });
+  };
+
+}]);
 
 // Please note that $modalInstance represents a modal window (instance) dependency.
 // It is not the same as the $modal service used above.
@@ -42,9 +40,19 @@ app.controller('ModalInstanceCtrl', [
     $scope.email = "";
     $scope.password = "";
 
-    $scope.ok = function () {
+    $scope.ok = function (action) {
       $log.info('email' + $scope.email + ' password ' + $scope.password);
-      myFirebase.createUser($scope.email, $scope.password);
+
+      switch(action)
+      {
+        case 'create':
+          myFirebase.createUser($scope.email, $scope.password);
+          break;
+        case 'login':
+          myFirebase.login($scope.email, $scope.password);
+          break;
+      }
+
       $modalInstance.close('close');
     };
 

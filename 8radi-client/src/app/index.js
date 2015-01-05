@@ -5,8 +5,8 @@ angular.module('8rad', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngRe
     $stateProvider
       .state('home', {
         url: '/',
-        templateUrl: 'app/main/main.html',
-        controller: 'MainCtrl'
+        templateUrl: 'app/main/js/welcome/main.html',
+        controller: 'WelcomeCtrl'
       });
 
     $urlRouterProvider.otherwise('/');
