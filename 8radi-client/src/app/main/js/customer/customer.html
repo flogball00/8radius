@@ -1,0 +1,15 @@
+<div class="container">
+    <div ng-include="'components/navbar/navbar.html'"></div>
+    <div class="col-md-10">
+        <table class="table table-bordered table-striped table-responsive">
+            <thead>
+                <tr><th>Job ID</th><th>Post Date</th><th>Description</th><th>Comments</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="posting in postings">
+                <td>{{posting.id}}</td><td>{{posting.date}}</td><td>{{posting.description}}</td><td>{{posting.comment | limitTo: 30}}</td><td>{{posting.status}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

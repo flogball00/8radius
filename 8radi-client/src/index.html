@@ -10,6 +10,9 @@
     <!-- build:css({.tmp,src}) styles/vendor.css -->
     <link rel="stylesheet" href="app/vendor.css">
     <!-- bower:css -->
+    <link rel="stylesheet" href="../bower_components/angular-ui-select/dist/select.css" />
+    <link rel="stylesheet" href="../bower_components/select2/select2.css" />
+    <link rel="stylesheet" href="../bower_components/selectize/dist/css/selectize.css" />
     <!-- endbower -->
     <!-- endbuild -->
     
@@ -56,6 +59,11 @@
     <script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="../bower_components/firebase/firebase.js"></script>
     <script src="../bower_components/angularfire/dist/angularfire.js"></script>
+    <script src="../bower_components/angular-ui-select/dist/select.js"></script>
+    <script src="../bower_components/select2/select2.js"></script>
+    <script src="../bower_components/sifter/sifter.js"></script>
+    <script src="../bower_components/microplugin/src/microplugin.js"></script>
+    <script src="../bower_components/selectize/dist/js/selectize.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -63,9 +71,11 @@
     <!-- inject:js -->
     <script src="app/index.js"></script>
     <script src="app/main/js/welcome/welcome.js"></script>
+    <script src="app/main/js/services/state-counties.js"></script>
     <script src="app/main/js/services/firebase.js"></script>
-    <script src="components/navbar/navbar.controller.js"></script>
+    <script src="app/main/js/customer/customer.js"></script>
     <script src="app/config/config.js"></script>
+    <script src="components/navbar/navbar.controller.js"></script>
     <!-- endinject -->
 
     <!-- inject:partials -->
