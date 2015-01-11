@@ -1,11 +1,11 @@
 var app = angular.module('8rad');
 
-app.factory("fireRef", [function() {
+app.factory("fireRef", [function () {
     var ref = new Firebase(radiusConfig.firebase.host);
     return ref;
 }]);
 
-app.service('myFirebase', ['$firebase', 'fireRef', '$q', function($firebase, fireRef, $q) {
+app.service('myFirebase', ['$firebase', 'fireRef', '$q', function ($firebase, fireRef, $q) {
 
     var sync = $firebase(fireRef);
 
@@ -14,11 +14,13 @@ app.service('myFirebase', ['$firebase', 'fireRef', '$q', function($firebase, fir
     function authWithPassword(userObj) {
         var deferred = $q.defer();
         fireRef.authWithPassword(userObj, function onAuth(err, user) {
-            if (err) {
+            if (err)
+            {
                 deferred.reject(err);
             }
 
-            if (user) {
+            if (user)
+            {
                 deferred.resolve(user);
             }
         });
@@ -32,9 +34,11 @@ app.service('myFirebase', ['$firebase', 'fireRef', '$q', function($firebase, fir
         var deferred = $q.defer();
         fireRef.createUser(userObj, function (err) {
             console.log('err', err);
-            if (!err) {
+            if (!err)
+            {
                 deferred.resolve();
-            } else {
+            } else
+            {
                 deferred.reject(err);
             }
         });
@@ -52,23 +56,22 @@ app.service('myFirebase', ['$firebase', 'fireRef', '$q', function($firebase, fir
     }
 
     return {
-        createUser: function(userObj){
+        createUser: function (userObj) {
             return createUserAndLogin(userObj);
         },
 
-        login: function(userObj) {
+        login: function (userObj) {
             return authWithPassword(userObj);
         },
 
-        getPostings: function() {
+        getPostings: function () {
             return 'mikes test postings';
         }
     }
 }]);
 
 
-app.factory('fireAuth', ['$firebaseAuth','fireRef', function($firebaseAuth, fireRef) {
-    console.log('looking for auth');
+app.factory('fireAuth', ['$firebaseAuth', 'fireRef', function ($firebaseAuth, fireRef) {
     return fireRef.getAuth();
 }]);
 

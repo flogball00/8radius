@@ -1,63 +1,66 @@
 <div class="container">
 
-  <div ng-include="'components/navbar/navbar.html'"></div>
+    <div ng-include="'components/navbar/navbar.html'"></div>
 
-  <a ui-sref="customer">Customer</a>
-  <div class="row" ng-controller="WelcomeCtrl">
-    <script type="text/ng-template" id="createUser.html">
-      <div class="modal-header">
-        <h3 class="modal-title">Create A New User</h3>
-      </div>
-      <div class="modal-body">
-        <form class="form" role="form">
-        <label for="emailAddress">Email</label><input class="form-control" type="email" id="emailAddress" ng-model="user.email"/>
-        <label for="password">Password</label><input class="form-control" type="password" id="password" ng-model="user.password"/>
-        <label for="firstName">First Name</label><input class="form-control" type="text" id="firstName" ng-model="user.firstName"/>
-        <label for="lastName">Last Name</label><input class="form-control" type="text" id="lastName" ng-model="user.lastName"/>
-        <label for="state">State</label>
-          <ui-select id="state" ng-model="user.location.state" theme="bootstrap" ng-disabled="disabled" style="width: 300px;">
-          <ui-select-match placeholder="Select state in the list...">{{$select.selected.name}}</ui-select-match>
-          <ui-select-choices repeat="state in states | filter: $select.search">
-            <span ng-bind-html="state.name | highlight: $select.search"></span>
-            <!--<small ng-bind-html="state.abbreviation | highlight: $select.search"></small>-->
-          </ui-select-choices>
-        </ui-select>
-
-
-       <label for="zip">Zip</label><input class="form-control" type="number" id="zip" ng-model="user.zip"/>
-       <label for="accountType">Account Type</label><select class="form-control" id='accountType'  ng-model="user.accountType" ng-options="accountType for accountType in accountTypes"></select>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="ok('create')">OK</button>
-        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-      </div>
-    </script>
-    <script type="text/ng-template" id="loginUser.html">
-      <div class="modal-header">
-        <h3 class="modal-title">Log In</h3>
-      </div>
-      <div class="modal-body">
-        <label for="emailAddress">Email</label><input type="text" id="emailAddress" ng-model="user.email"/>
-        <label for="password">Password</label><input type="text" id="password" ng-model="user.password"/>
-
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="ok('login')">OK</button>
-        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-      </div>
-    </script>
-    <div class="container">
-      <div class="text-center options-block">
-        <div class="options-button-row">
-          <button class="btn btn-success" ng-click="createUser()">Create New User</button><button class="btn btn-primary" ng-click="login()">Login</button>
+        <a ui-sref="customer">Customer</a>
+        <div class="row" ng-controller="WelcomeCtrl">
+        <script type="text/ng-template" id="createUser.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Create A New User</h3>
+            </div>
+            <div class="modal-body">
+                <form class="form" role="form">
+                    <label for="emailAddress">Email</label><input class="form-control" type="email" id="emailAddress" ng-model="user.email"/>
+                    <label for="password">Password</label><input class="form-control" type="password" id="password" ng-model="user.password"/>
+                    <label for="firstName">First Name</label><input class="form-control" type="text" id="firstName" ng-model="user.firstName"/>
+                    <label for="lastName">Last Name</label><input class="form-control" type="text" id="lastName" ng-model="user.lastName"/>
+                    <label for="state">State</label>
+                      <ui-select id="state" ng-model="user.location.state" theme="bootstrap" ng-disabled="disabled" style="width: 300px;">
+                      <ui-select-match placeholder="Select state in the list...">{{$select.selected.name}}</ui-select-match>
+                      <ui-select-choices repeat="state in states | filter: $select.search">
+                        <span ng-bind-html="state.name | highlight: $select.search"></span>
+                        <!--<small ng-bind-html="state.abbreviation | highlight: $select.search"></small>-->
+                      </ui-select-choices>
+                    </ui-select>
+                    <span ng-if="stateSelected">
+                        <label for="county">County</label>
+                        <ui-select id="county" ng-model="user.location.county" theme="bootstrap" ng-disabled="disabled" style="width: 300px;">
+                            <ui-select-match placeholder="Select county in the list...">{{$select.selected}}</ui-select-match>
+                            <ui-select-choices repeat="county in counties | filter: $select.search">
+                                <span ng-bind-html="county | highlight: $select.search"></span>
+                                <!--<small ng-bind-html="state.abbreviation | highlight: $select.search"></small>-->
+                            </ui-select-choices>
+                        </ui-select>
+                    </span>
+                   <label for="zip">Zip</label><input class="form-control" type="number" id="zip" ng-model="user.location.zip"/>
+                   <label for="accountType">Account Type</label><select class="form-control" id='accountType'  ng-model="user.accountType" ng-options="accountType for accountType in accountTypes"></select>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="ok('create')">OK</button>
+                <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+            </div>
+        </script>
+        <script type="text/ng-template" id="loginUser.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Log In</h3>
+            </div>
+            <div class="modal-body">
+                <label for="emailAddress">Email</label><input type="text" id="emailAddress" ng-model="user.email"/>
+                <label for="password">Password</label><input type="text" id="password" ng-model="user.password"/>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="ok('login')">OK</button>
+                <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+            </div>
+        </script>
+        <div class="container">
+            <div class="text-center options-block">
+                <div class="options-button-row">
+                    <button class="btn btn-success" ng-click="createUser()">Create New User</button><button class="btn btn-primary" ng-click="login()">Login</button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-
-  <hr>
-
-
-
+    <hr>
 </div>

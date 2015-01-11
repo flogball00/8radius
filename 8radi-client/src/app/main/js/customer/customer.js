@@ -15,7 +15,7 @@ mod.config([
                 }
             },
             resolve: {
-                postings: ['myFirebase', function(myFirebase){
+                postings: ['myFirebase', function (myFirebase) {
                     return myFirebase.getPostings();
                 }]
             }
