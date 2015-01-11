@@ -38,10 +38,10 @@ app.controller('ModalInstanceCtrl', [
     '$log',
     'myFirebase',
     'counties',
-    '$stateParams',
+    '$state',
     '$rootScope',
     'states',
-    function ModalInstanceCtrl($scope, $modalInstance, $log, myFirebase, counties, $stateParams, $rootScope, states) {
+    function ModalInstanceCtrl($scope, $modalInstance, $log, myFirebase, counties, $state, $rootScope, states) {
 
         states.then(function (data) {
             $scope.states = data;
@@ -83,7 +83,7 @@ app.controller('ModalInstanceCtrl', [
                                     zip: $scope.user.location.zip
                                 }
                             };
-                            myFirebase.set($scope.fullUser);
+                            myFirebase.sync.$set($scope.fullUser);
                         }).then(function () {
                             $rootScope.user = $scope.fullUser
                             $state.go('customers')

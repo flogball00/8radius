@@ -66,7 +66,9 @@ app.service('myFirebase', ['$firebase', 'fireRef', '$q', function ($firebase, fi
 
         getPostings: function () {
             return 'mikes test postings';
-        }
+        },
+
+        sync : sync
     }
 }]);
 
