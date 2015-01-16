@@ -1,7 +1,7 @@
 <div class="container">
 
     <div ng-include="'components/navbar/navbar.html'"></div>
-
+        <alert ng-if="showAuthRequired"  type="warning" close="closeAlert()">Please Log In</alert>
         <a ui-sref="customer">Customer</a>
         <div class="row" ng-controller="WelcomeCtrl">
         <script type="text/ng-template" id="createUser.html">

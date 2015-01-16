@@ -1,6 +1,11 @@
 <div class="container">
     <div ng-include="'components/navbar/navbar.html'"></div>
     <div class="col-md-10">
+        <a ui-sref="posting">New Post</a>
+        <button class="btn btn-danger" ng-click="logout()">Log Out</button>
+    </div>
+
+    <div class="col-md-10">
         <table class="table table-bordered table-striped table-responsive">
             <thead>
                 <tr><th>Job ID</th><th>Post Date</th><th>Description</th><th>Comments</th><th>Status</th></tr>

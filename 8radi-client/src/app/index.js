@@ -7,7 +7,7 @@ angular.module('8rad', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngRe
             views: {
                 '@': {
                     controller: 'WelcomeCtrl',
-                    templateUrl: 'app/main/js/welcome/main.html'
+                    templateUrl: 'app/main/js/welcome/welcome.html'
                 }
             }
 
@@ -17,12 +17,16 @@ angular.module('8rad', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngRe
 
         $urlRouterProvider.otherwise('/');
     })
-    .run(['$rootScope', 'fireAuth', function ($rootScope, fireAuth) {
-        //$rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error){
-        //  console.log(error);
-        //});
-        //hack b/c something is off with minification and state resolves here
-        $rootScope.fireAuth = fireAuth;
+    .run(['$rootScope', '$state', 'fireAuth', function ($rootScope, $state, fireAuth) {
+
+        $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState, fromParams, error) {
+            // We can catch the error thrown when the $requireAuth promise is rejected
+            // and redirect the user back to the home page
+            if (error === "AUTH_REQUIRED") {
+                $rootScope.$broadcast('AUTH_REQUIRED', 'auth_required_data');
+                $state.go("home");
+            }
+        });
     }]);
 
 

@@ -8,8 +8,18 @@ app.controller('WelcomeCtrl', [
     '$modal',
     '$log',
     '$rootScope',
-    function WelcomeCtrl($scope, $modal, $log, $rootScope) {
-        console.log('logged in here', $rootScope.fireAuth);
+    '$state',
+    'fireAuth',
+    'myFirebase',
+    function WelcomeCtrl($scope, $modal, $log, $rootScope, $state, fireAuth, myFirebase) {
+        $scope.auth = fireAuth;
+
+        $scope.authenticated = $scope.auth.$getAuth();
+
+        if($scope.authenticated){
+            $rootScope.currentUser = myFirebase.getCurrentUser($scope.authenticated.auth.uid);
+            $state.go('customer');
+        }
 
         $scope.createUser = function (size) {
             var modalInstance = $modal.open({
@@ -26,6 +36,15 @@ app.controller('WelcomeCtrl', [
                 size: size
             });
         };
+
+        $scope.$on('AUTH_REQUIRED', function(event, data){
+            console.log('auth ON heard', event, data);
+            $scope.showAuthRequired = true;
+        });
+
+        $scope.closeAlert = function() {
+            $scope.showAuthRequired = false;
+        }
 
     }]);
 
@@ -47,13 +66,14 @@ app.controller('ModalInstanceCtrl', [
             $scope.states = data;
         });
 
-
         $scope.user = {
             'accountType': 'Customer'
         };
+
         $scope.accountTypes = ['Customer', 'Contractor'];
 
         $scope.stateSelected = false;
+
         $scope.$watch('user.location.state', function (newValue, oldValue) {
             if (newValue)
             {
@@ -75,24 +95,29 @@ app.controller('ModalInstanceCtrl', [
                     myFirebase.createUser($scope.user)
                         .then(function (data) {
                             $scope.fullUser = {
-                                userId: data.uid,
-                                firstName: $scope.user.firstName,
-                                lastName: $scope.user.lastName,
-                                location: {
-                                    state: $scope.user.location.state.name,
-                                    zip: $scope.user.location.zip
-                                }
+                                    userId: data.uid,
+                                    firstName: $scope.user.firstName,
+                                    lastName: $scope.user.lastName,
+                                    location: {
+                                        state: $scope.user.location.state.name,
+                                        county: $scope.user.location.county,
+                                        zip: $scope.user.location.zip
+                                    }
                             };
-                            myFirebase.sync.$set($scope.fullUser);
+                            myFirebase.addUser($scope.fullUser);
                         }).then(function () {
-                            $rootScope.user = $scope.fullUser
-                            $state.go('customers')
+                            $rootScope.current = $scope.fullUser;
+                            console.log('user created and logged in');
+                            $state.go('customer');
                         });
                     break;
                 case 'login':
                     myFirebase.login($scope.user)
                         .then(function (data) {
-                            console.log('logged in', data);
+                            $rootScope.currentUser = myFirebase.getCurrentUser(data.auth.uid);
+                            console.log('logged in');
+                            $state.go('customer');
+
                         });
                     break;
             }

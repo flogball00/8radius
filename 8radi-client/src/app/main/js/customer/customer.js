@@ -7,7 +7,7 @@ mod.config([
     '$urlRouterProvider',
     function ($stateProvider, $urlRouterProvider) {
         $stateProvider.state('customer', {
-            url: '/customer',
+            url: 'customer',
             views: {
                 '@': {
                     controller: 'CustomerMainCtrl',
@@ -15,8 +15,8 @@ mod.config([
                 }
             },
             resolve: {
-                postings: ['myFirebase', function (myFirebase) {
-                    return myFirebase.getPostings();
+                currentAuth: ['fireAuth', function (fireAuth) {
+                    return fireAuth.$requireAuth();
                 }]
             }
 
@@ -29,9 +29,17 @@ mod.controller('CustomerMainCtrl', [
     '$state',
     '$q',
     '$rootScope',
-    'postings',
-    function CustomerMainCtrl($scope, $state, $q, $rootScope, postings) {
-        console.log(postings);
+    'currentAuth',
+    'myFirebase',
+    function CustomerMainCtrl($scope, $state, $q, $rootScope, currentAuth, myFirebase) {
+        $scope.logout = function(){
+            myFirebase.logout();
+            $state.go('home', {logout:true}, {poo:true});
+        };
+
+
+        console.log('currentuser', $rootScope.currentUser);
+
     }
 
 ]);

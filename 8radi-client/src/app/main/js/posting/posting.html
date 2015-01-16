@@ -1,0 +1,19 @@
+<div class="container">
+    <div ng-include="'components/navbar/navbar.html'"></div>
+    <a ui-sref="home">home</a>
+
+    <div class="col-md-10">
+        <div class="header">
+            <h3 class="modal-title">Create A New User</h3>
+        </div>
+        <div class="body">
+            <form class="form" role="form">
+                <label for="title">Title</label><input class="form-control" type="text" id="title" ng-model="postData.title"/>
+                <label for="description">Description</label><textarea class="form-control" type="text" id="description" ng-model="postData.description"/>
+                <label for="city">City</label><input class="form-control" type="text" id="city" ng-model="postData.city"/>
+                <label for="startdate">Start Date</label><input class="form-control" type="text" id="startdate" ng-model="postData.startdate"/>
+            </form>
+            <button ng-click="post()" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</div>

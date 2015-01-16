@@ -1,16 +1,47 @@
 var app = angular.module('8rad');
 
-app.factory("fireRef", [function () {
+app.factory('fireRef', [function () {
     var ref = new Firebase(radiusConfig.firebase.host);
     return ref;
 }]);
 
-app.service('myFirebase', ['$firebase', 'fireRef', '$q', function ($firebase, fireRef, $q) {
+var pathRef = function(args) {
+    for(var i=0; i < args.length; i++) {
+        if( typeof(args[i]) === 'object' ) {
+            args[i] = pathRef(args[i]);
+        }
+    }
+    return args.join('/');
+};
 
-    var sync = $firebase(fireRef);
+app.factory('gFirebaseRef', [function() {
+    return function() {
+        var path = pathRef([radiusConfig.firebase.host].concat(Array.prototype.slice.call(arguments)));
+        return new Firebase(path);
+    };
+}]);
+
+app.factory('ngFirebaseRef', ['$firebase', function($firebase) {
+    return function() {
+        var path = pathRef([radiusConfig.firebase.host].concat(Array.prototype.slice.call(arguments)));
+        var fbRef = new Firebase(path);
+        return  $firebase(fbRef);
+    };
+}]);
+
+
+app.factory('fireAuth', ['$firebaseAuth', 'fireRef', function ($firebaseAuth, fireRef) {
+    return $firebaseAuth(fireRef);
+}]);
+
+
+app.service('myFirebase', ['$firebase', 'fireRef', 'gFirebaseRef', 'ngFirebaseRef', '$q', function ($firebase, fireRef, gFirebaseRef, ngFirebaseRef, $q) {
+
+    var ngFireSync = $firebase(fireRef);
 
     // Handle Email/Password login
     // returns a promise
+
     function authWithPassword(userObj) {
         var deferred = $q.defer();
         fireRef.authWithPassword(userObj, function onAuth(err, user) {
@@ -60,20 +91,53 @@ app.service('myFirebase', ['$firebase', 'fireRef', '$q', function ($firebase, fi
             return createUserAndLogin(userObj);
         },
 
+        addUser: function(user){
+            ngFirebaseRef('Users', user.userId).$set(user);
+        },
+
         login: function (userObj) {
             return authWithPassword(userObj);
+        },
+
+        logout: function() {
+            return fireRef.unauth();
         },
 
         getPostings: function () {
             return 'mikes test postings';
         },
 
-        sync : sync
+        getCurrentUser: function(uid) {
+           return ngFirebaseRef('Users', uid).$asObject();
+
+        },
+
+        getAllUsers: function() {
+            return ngFirebaseRef('Users').$asObject();
+        },
+
+        incrementPostCount: function(){
+            return ngFirebaseRef('Counts', 'postCount').$transaction(function(currentValue) {
+                console.log(currentValue);
+                return (currentValue||0) + 1;
+            });
+        },
+
+        addPost: function(post, user) {
+            return ngFirebaseRef(user.location.state, 'Posts').$push(post);
+        },
+
+        addPostKey: function(key, userId) {
+            return ngFirebaseRef('Users', userId, 'posts').$push(key);
+        }
+
+
+
+
+
+
     }
 }]);
 
 
-app.factory('fireAuth', ['$firebaseAuth', 'fireRef', function ($firebaseAuth, fireRef) {
-    return fireRef.getAuth();
-}]);
 
