@@ -5,16 +5,18 @@
         <button class="btn btn-danger" ng-click="logout()">Log Out</button>
     </div>
 
-    <div class="col-md-10">
+    <div class="col-md-10" ng-controller="CustomerOwnPostCtrl">
+        <h3>My Posts</h3>
         <table class="table table-bordered table-striped table-responsive">
             <thead>
-                <tr><th>Job ID</th><th>Post Date</th><th>Description</th><th>Comments</th><th>Status</th></tr>
+                <tr><th>Title</th><th>Post Date</th><th>Description</th><th>Status</th></tr>
             </thead>
             <tbody>
-            <tr ng-repeat="posting in postings">
-                <td>{{posting.id}}</td><td>{{posting.date}}</td><td>{{posting.description}}</td><td>{{posting.comment | limitTo: 30}}</td><td>{{posting.status}}</td>
+            <tr ng-repeat="post in postings">
+                <td>{{post.title}}</td><td>{{post.createdAt | date:'MM/dd/yyyy @ h:mma'}}</td><td>{{post.description}}</td><td>{{post.status}}</td>
             </tr>
             </tbody>
         </table>
     </div>
+
 </div>

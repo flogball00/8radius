@@ -18,6 +18,7 @@ mod.config([
                 currentAuth: ['fireAuth', function (fireAuth) {
                     return fireAuth.$requireAuth();
                 }]
+
             }
 
         });
@@ -32,15 +33,41 @@ mod.controller('CustomerMainCtrl', [
     'currentAuth',
     'myFirebase',
     function CustomerMainCtrl($scope, $state, $q, $rootScope, currentAuth, myFirebase) {
+
+        var rootUser = myFirebase.getCurrentNGUser($rootScope.userId);
+
+
         $scope.logout = function(){
             myFirebase.logout();
             $state.go('home', {logout:true}, {poo:true});
         };
 
 
-        console.log('currentuser', $rootScope.currentUser);
-
     }
 
 ]);
 
+mod.controller('CustomerOwnPostCtrl', [
+    '$scope',
+    '$state',
+    '$q',
+    '$rootScope',
+    'myFirebase',
+    function CustomerOwnPostCtrl($scope, $state, $q, $rootScope, myFirebase) {
+
+            var temp = [];
+            for(var propertyName in $rootScope.currentUser.posts){
+                myFirebase.getPost(propertyName, $rootScope.currentUser).once('value', function(snapshot){
+                    if(snapshot.val()){
+                        temp.push(snapshot.val());
+                    }
+                    $scope.$apply(function(){
+                        $scope.postings = temp;
+                    });
+                });
+            }
+
+
+    }
+
+]);

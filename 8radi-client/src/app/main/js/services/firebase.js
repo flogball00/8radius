@@ -35,7 +35,7 @@ app.factory('fireAuth', ['$firebaseAuth', 'fireRef', function ($firebaseAuth, fi
 }]);
 
 
-app.service('myFirebase', ['$firebase', 'fireRef', 'gFirebaseRef', 'ngFirebaseRef', '$q', function ($firebase, fireRef, gFirebaseRef, ngFirebaseRef, $q) {
+app.service('myFirebase', ['$firebase', 'fireRef', 'fireAuth', 'gFirebaseRef', 'ngFirebaseRef', '$q', function ($firebase, fireRef, fireAuth, gFirebaseRef, ngFirebaseRef, $q) {
 
     var ngFireSync = $firebase(fireRef);
 
@@ -87,8 +87,8 @@ app.service('myFirebase', ['$firebase', 'fireRef', 'gFirebaseRef', 'ngFirebaseRe
     }
 
     return {
-        createUser: function (userObj) {
-            return createUserAndLogin(userObj);
+        createUser: function (user) {
+            return createUserAndLogin(user);
         },
 
         addUser: function(user){
@@ -100,16 +100,23 @@ app.service('myFirebase', ['$firebase', 'fireRef', 'gFirebaseRef', 'ngFirebaseRe
         },
 
         logout: function() {
-            return fireRef.unauth();
+            return fireAuth.$unauth();
         },
 
-        getPostings: function () {
-            return 'mikes test postings';
+        getPost: function (postId, user) {
+            return gFirebaseRef('Posts' , user.location.state, postId);
+        },
+
+        getOwnPosts: function (uid) {
+             return ngFirebaseRef('Users', uid, 'posts').$asArray();
         },
 
         getCurrentUser: function(uid) {
-           return ngFirebaseRef('Users', uid).$asObject();
+           return gFirebaseRef('Users', uid);
+        },
 
+        getCurrentNGUser: function(uid) {
+            return ngFirebaseRef('Users', uid).$asObject();
         },
 
         getAllUsers: function() {
@@ -118,19 +125,21 @@ app.service('myFirebase', ['$firebase', 'fireRef', 'gFirebaseRef', 'ngFirebaseRe
 
         incrementPostCount: function(){
             return ngFirebaseRef('Counts', 'postCount').$transaction(function(currentValue) {
-                console.log(currentValue);
                 return (currentValue||0) + 1;
             });
         },
 
         addPost: function(post, user) {
-            return ngFirebaseRef(user.location.state, 'Posts').$push(post);
+            return ngFirebaseRef('Posts', user.location.state ).$push(post);
         },
 
-        addPostKey: function(key, userId) {
-            return ngFirebaseRef('Users', userId, 'posts').$push(key);
-        }
+        addPostKey: function(key, uid) {
+            return ngFirebaseRef('Users', uid, 'posts', key).$set({createdAt:Firebase.ServerValue.TIMESTAMP});
+        },
 
+        getTimestamp: function() {
+            return Firebase.ServerValue.TIMESTAMP;
+        }
 
 
 

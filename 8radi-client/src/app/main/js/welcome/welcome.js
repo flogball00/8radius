@@ -17,8 +17,11 @@ app.controller('WelcomeCtrl', [
         $scope.authenticated = $scope.auth.$getAuth();
 
         if($scope.authenticated){
-            $rootScope.currentUser = myFirebase.getCurrentUser($scope.authenticated.auth.uid);
-            $state.go('customer');
+            $rootScope.userId = $scope.authenticated.auth.uid;
+            myFirebase.getCurrentUser($scope.authenticated.auth.uid).once('value', function(snapshot){
+                $rootScope.currentUser = snapshot.val();
+                $state.go('customer');
+            });
         }
 
         $scope.createUser = function (size) {
@@ -106,7 +109,7 @@ app.controller('ModalInstanceCtrl', [
                             };
                             myFirebase.addUser($scope.fullUser);
                         }).then(function () {
-                            $rootScope.current = $scope.fullUser;
+                            $rootScope.userId = $scope.fullUser.userId;
                             console.log('user created and logged in');
                             $state.go('customer');
                         });
@@ -114,9 +117,12 @@ app.controller('ModalInstanceCtrl', [
                 case 'login':
                     myFirebase.login($scope.user)
                         .then(function (data) {
-                            $rootScope.currentUser = myFirebase.getCurrentUser(data.auth.uid);
-                            console.log('logged in');
-                            $state.go('customer');
+                            $rootScope.userId = data.auth.uid;
+                            myFirebase.getCurrentUser(data.auth.uid).once('value', function(snapshot){
+                                $rootScope.currentUser = snapshot.val();
+                                console.log('logged in');
+                                $state.go('customer');
+                            });
 
                         });
                     break;

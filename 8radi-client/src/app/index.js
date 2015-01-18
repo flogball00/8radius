@@ -9,6 +9,10 @@ angular.module('8rad', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngRe
                     controller: 'WelcomeCtrl',
                     templateUrl: 'app/main/js/welcome/welcome.html'
                 }
+            },
+            onExit: function(myFirebase, $rootScope){
+                var rootUser = myFirebase.getCurrentNGUser($rootScope.userId);
+                rootUser.$bindTo($rootScope, 'currentUser')
             }
 
 

@@ -34,19 +34,21 @@ mod.controller('PostingCtrl', [
     'fireRef',
     function PostingCtrl($scope, $state, $q, $rootScope, currentAuth, myFirebase, fireRef) {
 
-
         $scope.postData = {
-            createdBy: $rootScope.currentUser.$id,
+            createdBy: $rootScope.currentUser.userId,
             status: 'open'
-
         };
+
 
         console.log($rootScope.currentUser);
 
         $scope.post = function() {
+            $scope.postData.createdAt = myFirebase.getTimestamp();
+
             myFirebase.incrementPostCount();
+
             myFirebase.addPost($scope.postData, $rootScope.currentUser).then(function(ref) {
-                myFirebase.addPostKey(ref.key(), $rootScope.currentUser.$id).then(function(){
+                myFirebase.addPostKey(ref.key(), $rootScope.currentUser.userId).then(function(){
                     console.log('post added');
                     $state.go('customer');
                 });   // key for the new ly created record
