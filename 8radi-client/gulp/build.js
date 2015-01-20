@@ -138,8 +138,13 @@ gulp.task('misc', function () {
     .pipe(gulp.dest('dist/'));
 });
 
+gulp.task('resources', function () {
+  return gulp.src('src/assets/resources/*')
+      .pipe(gulp.dest('dist/assets/resources/'));
+});
+
 gulp.task('clean', function (done) {
   $.del(['dist/', '.tmp/'], done);
 });
 
-gulp.task('build', ['html', 'images', 'fonts', 'misc']);
+gulp.task('build', ['html', 'images', 'fonts', 'misc', 'resources']);

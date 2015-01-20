@@ -4,7 +4,7 @@ app.factory('counties', ['$http', '$q', function ($http, $q) {
     return {
         getCountiesByState: function (mystate) {
             var deferred = $q.defer();
-            $http.get('/app/resources/counties.json').success(function (data) {
+            $http.get('/assets/resources/counties.json').success(function (data) {
                     deferred.resolve(data[mystate]);
                 }
             );
@@ -17,7 +17,7 @@ app.factory('counties', ['$http', '$q', function ($http, $q) {
 
 app.factory('states', ['$http', '$q', function ($http, $q) {
     var deferred = $q.defer();
-    $http.get('/app/resources/states.json').success(function (data) {
+    $http.get('/assets/resources/states.json').success(function (data) {
             deferred.resolve(data);
         }
     );
